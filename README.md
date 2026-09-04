@@ -14,7 +14,7 @@ See the presentation here:
 ## Run Petclinic locally
 
 Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/).
-Java 17 or later is required for the build, and the application can run with Java 17 or newer.
+Java 21 or later is required for the build, and the application can run with Java 21 or newer.
 
 You first need to clone the project locally:
 
@@ -58,6 +58,19 @@ docker run -p 8080:8080 docker.io/library/spring-petclinic:latest
 ## In case you find a bug/suggested improvement for Spring Petclinic
 
 Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
+
+## End-to-end tests (Playwright)
+
+Run the Playwright end-to-end tests from the `e2e` directory:
+
+```bash
+cd e2e
+npm ci
+npx playwright install --with-deps chromium
+npx playwright test
+```
+
+Playwright starts the application itself with `./mvnw spring-boot:run`, or reuses an application already running on port 8080. Test videos are saved as `.webm` files under `e2e/test-results/`. Generate the HTML report with `npx playwright show-report`. The `e2e-playwright.yml` CI workflow uploads videos and the HTML report as artifacts.
 
 ## Database configuration
 
@@ -108,7 +121,7 @@ There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was 
 
 The following items should be installed in your system:
 
-- Java 17 or newer (full JDK, not a JRE)
+- Java 21 or newer (full JDK, not a JRE)
 - [Git command line tool](https://help.github.com/articles/set-up-git)
 - Your preferred IDE
   - Eclipse with the m2e plugin. Note: when m2e is available, there is a m2 icon in `Help -> About` dialog. If m2e is
