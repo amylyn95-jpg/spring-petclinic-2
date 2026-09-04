@@ -59,6 +59,19 @@ docker run -p 8080:8080 docker.io/library/spring-petclinic:latest
 
 Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
 
+## End-to-end tests (Playwright)
+
+Run the Playwright end-to-end tests from the `e2e` directory:
+
+```bash
+cd e2e
+npm ci
+npx playwright install --with-deps chromium
+npx playwright test
+```
+
+Playwright starts the application itself with `./mvnw spring-boot:run`, or reuses an application already running on port 8080. Test videos are saved as `.webm` files under `e2e/test-results/`. Generate the HTML report with `npx playwright show-report`. The `e2e-playwright.yml` CI workflow uploads videos and the HTML report as artifacts.
+
 ## Database configuration
 
 In its default configuration, Petclinic uses an in-memory database (H2) which
