@@ -1,0 +1,50 @@
+# This workflow builds the PetClinic jar, then runs the Playwright end-to-end
+# suite against it and uploads the recorded videos and HTML report as artifacts.
+
+name: Playwright E2E
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build application jar
+        run: ./mvnw -B package -DskipTests
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: e2e/package-lock.json
+      - name: Install e2e dependencies
+        working-directory: e2e
+        run: npm ci
+      - name: Install Playwright browsers
+        working-directory: e2e
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        working-directory: e2e
+        run: npx playwright test
+      - name: Upload videos and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-videos-and-report
+          path: |
+            e2e/test-results/**
+            e2e/playwright-report/**
+          retention-days: 14
+          if-no-files-found: warn

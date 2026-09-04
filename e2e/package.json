@@ -1,0 +1,16 @@
+{
+  "name": "spring-petclinic-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright end-to-end tests for Spring PetClinic",
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report",
+    "install:browsers": "playwright install --with-deps chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@types/node": "22.20.1",
+    "typescript": "5.9.3"
+  }
+}
