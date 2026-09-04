@@ -14,7 +14,7 @@ See the presentation here:
 ## Run Petclinic locally
 
 Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/).
-Java 17 or later is required for the build, and the application can run with Java 17 or newer.
+Java 21 or later is required for the build, and the application can run with Java 21 or newer.
 
 You first need to clone the project locally:
 
@@ -98,6 +98,20 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## End-to-end tests
+
+A [Playwright](https://playwright.dev/) end-to-end suite lives in the `e2e/` directory. It starts the application itself (building the jar with Maven if needed, using the default H2 database) and drives the main user flows in a real browser. Every test run is recorded as a video.
+
+```bash
+cd e2e
+npm ci
+npx playwright install --with-deps chromium
+npx playwright test
+npx playwright show-report   # open the HTML report with embedded videos
+```
+
+Videos (`.webm`), screenshots and traces are saved under `e2e/test-results/` and the HTML report under `e2e/playwright-report/`. In CI, the `E2E Tests with Playwright` workflow uploads both directories as downloadable artifacts on every run.
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
@@ -108,7 +122,7 @@ There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was 
 
 The following items should be installed in your system:
 
-- Java 17 or newer (full JDK, not a JRE)
+- Java 21 or newer (full JDK, not a JRE)
 - [Git command line tool](https://help.github.com/articles/set-up-git)
 - Your preferred IDE
   - Eclipse with the m2e plugin. Note: when m2e is available, there is a m2 icon in `Help -> About` dialog. If m2e is
