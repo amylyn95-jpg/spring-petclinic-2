@@ -41,7 +41,7 @@ test.describe('Spring PetClinic smoke tests', () => {
     await form.locator('#telephone').fill('5551234567');
     await form.getByRole('button', { name: 'Add Owner' }).click();
 
-    await expect(page).toHaveURL(/\/owners\/\d+$/);
+    await expect(page).toHaveURL(/\/owners\/\d+(;jsessionid=\w+)?$/);
     await expect(page.locator('#success-message')).toContainText('New Owner Created');
     await expect(page.getByText('Playwright Tester')).toBeVisible();
     await expect(page.getByText('Testville')).toBeVisible();
